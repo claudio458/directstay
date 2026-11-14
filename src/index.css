@@ -1,0 +1,31 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* DirectStay palette: deep navy + warm gold (taken from the live site) */
+    --background: 215 69% 10%;
+    --foreground: 214 50% 94%;
+    --card: 215 62% 14%;
+    --card-foreground: 214 50% 94%;
+    --primary: 40 77% 54%;
+    --primary-foreground: 215 69% 10%;
+    --secondary: 215 55% 18%;
+    --secondary-foreground: 214 50% 94%;
+    --muted: 215 50% 17%;
+    --muted-foreground: 214 20% 68%;
+    --accent: 215 50% 22%;
+    --accent-foreground: 214 50% 94%;
+    --destructive: 0 72% 55%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 60% 45%;
+    --border: 215 40% 22%;
+    --input: 215 40% 24%;
+    --ring: 40 77% 54%;
+    --radius: 0.75rem;
+  }
+  * { @apply border-border; }
+  body { @apply bg-background text-foreground font-sans antialiased; }
+  h1, h2, h3 { @apply tracking-tight; }
+}

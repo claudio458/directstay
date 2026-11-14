@@ -1,0 +1,7 @@
+project_id = "directstay"
+
+[functions.sync-calendars]
+verify_jwt = false
+
+[functions.pms-import]
+verify_jwt = false
