@@ -35,6 +35,8 @@ export interface Organization {
   phone?: string;
   website?: string;
   bio?: string;
+  /** Organization whose invite link this member joined with. */
+  referred_by?: string | null;
 }
 
 export interface Profile {
@@ -87,6 +89,8 @@ export interface Property {
   lng?: number | null;
   /** Channels this home is also advertised on (shown as "Also on Airbnb"). */
   listed_on?: Channel[];
+  /** The owner's own public listing pages on those channels. */
+  channel_links?: Partial<Record<Channel, string>>;
   /** Content source. Imported listings keep title/description/photos/location in sync while mirror_content is true. */
   listing_source: ListingSource;
   external_id?: string | null;

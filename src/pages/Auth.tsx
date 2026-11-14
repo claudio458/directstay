@@ -24,7 +24,7 @@ export default function AuthPage() {
     setBusy(true);
     try {
       if (mode === "signin") await signIn(f.email, f.password);
-      else await signUp({ ...f, role: f.org_type === "agency" ? "agent" : "owner" });
+      else await signUp({ ...f, role: f.org_type === "agency" ? "agent" : "owner", referred_by: params.get("ref") });
       nav("/dashboard");
     } catch (err) {
       toast.error((err as Error).message);
@@ -36,7 +36,7 @@ export default function AuthPage() {
       <Card className="w-full max-w-md">
         <CardHeader>
           <CardTitle>{mode === "signin" ? "Sign in" : "Join the exchange"}</CardTitle>
-          <CardDescription>{mode === "signin" ? "Welcome back." : "Free for agencies and private owners."}</CardDescription>
+          <CardDescription>{mode === "signin" ? "Welcome back." : params.get("ref") ? "You were invited by a partner agency. Free for property managers and owners." : "Free for property managers, agencies and owners."}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={submit} className="space-y-3">
@@ -67,7 +67,7 @@ export default function AuthPage() {
           </form>
           <p className="mt-4 text-center text-sm text-muted-foreground">
             {mode === "signin" ? "New here? " : "Already a member? "}
-            <button className="text-primary" onClick={() => setParams(mode === "signin" ? { mode: "signup" } : {})}>{mode === "signin" ? "Create an account" : "Sign in"}</button>
+            <button className="text-primary" onClick={() => setParams(mode === "signin" ? { mode: "signup", ...(params.get("ref") ? { ref: params.get("ref")! } : {}) } : {})}>{mode === "signin" ? "Create an account" : "Sign in"}</button>
           </p>
           {isDemo && mode === "signin" && <p className="mt-2 text-center text-xs text-muted-foreground">Demo login is pre-filled.</p>}
         </CardContent>

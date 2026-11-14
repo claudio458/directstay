@@ -37,7 +37,7 @@ Demo login: `demo@directstay.app` / `demo1234` (pre-filled on the sign-in page).
 
 ## Supabase setup (go live)
 
-1. **Schema**: run `supabase/migrations/0001_init.sql`, then `0003_imports_and_pricing.sql` and `0005_listed_on.sql`.
+1. **Schema**: run `supabase/migrations/0001_init.sql`, then `0003_imports_and_pricing.sql` `0005_listed_on.sql` and `0006_channel_links_and_invites.sql`.
 2. **Demo data (optional)**: `supabase/seed.sql` (regenerate with `node scripts/make-seed-sql.mjs`).
 3. **Edge functions**:
    ```bash
@@ -61,6 +61,7 @@ Demo login: `demo@directstay.app` / `demo1234` (pre-filled on the sign-in page).
 | iCal parser | `src/lib/ical.ts` and `supabase/functions/sync-calendars` |
 | PMS/MLS → listing mapping rules | `src/lib/importMapping.ts` and `supabase/functions/pms-import` (keep both in sync) |
 | Import UI (connect Guesty / Resales / Inmobalia, pick listings) | `src/pages/dashboard/ImportListings.tsx` |
+| Quick add (own Airbnb/Booking link + iCal), CSV bulk upload, invite-a-manager link | `src/pages/dashboard/ImportExtras.tsx`, `src/lib/csv.ts` |
 | Listing wizard (details → calendar → photos → publish, own price vs PMS rate) | `src/pages/dashboard/ListingEditor.tsx` |
 | Schema + row level security | `supabase/migrations/` |
 
@@ -78,6 +79,10 @@ Demo login: `demo@directstay.app` / `demo1234` (pre-filled on the sign-in page).
 - **Resales Online Web API V6**: `SearchProperties` + `PropertyDetails` with `p1` (agency), `p2` (key), `P_ApiId` (a filter containing only rentals). Resales requires whitelisting the caller IP; Supabase Edge Functions don't have a fixed IP, so you may need a small proxy with a static IP. Field names (`GpsX/GpsY`, `Pictures.Picture[].PictureURL`, rental price fields) should be checked against the agency's API output.
 - **Inmobalia**: imported through its Kyero v3 XML export (any Kyero feed works, so other Spanish CRMs are covered too). Sale listings (`price_freq = sale`) are skipped; weekly prices × 4.3.
 - **iCal**: Airbnb, Booking.com, VRBO, Google exports. Busy periods from the feed replace earlier imported blocks; manual blocks are kept.
+
+### What we deliberately do not do
+
+Listings only enter the exchange when their manager or owner adds them (PMS/MLS connection, their own Airbnb/Booking link + iCal, CSV, or by hand). The site does **not** scrape Airbnb or Booking.com, and does not collect contact details of hosts who have not joined: that breaks those platforms' terms and GDPR. Growth comes from the invite link (`organizations.referred_by`).
 
 ## Known gaps / next steps (phase 1 → 2)
 

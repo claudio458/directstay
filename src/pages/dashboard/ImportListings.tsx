@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { formatDistanceToNow } from "date-fns";
-import { ArrowLeft, CheckCircle2, Download, Link2, Plug, RefreshCw, Unplug } from "lucide-react";
+import { ArrowLeft, CheckCircle2, Download, Plug, RefreshCw, Unplug } from "lucide-react";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { toast } from "sonner";
@@ -12,6 +12,7 @@ import { Input, Label } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/lib/api";
 import { isDemo } from "@/lib/supabase";
+import { CsvImport, InviteManager, QuickAdd } from "./ImportExtras";
 import type { Integration, IntegrationProvider } from "@/lib/types";
 import { cn, formatPrice } from "@/lib/utils";
 
@@ -158,20 +159,23 @@ export default function ImportListings() {
   return (
     <div className="container max-w-4xl py-8">
       <Link to="/dashboard" className="mb-4 inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground"><ArrowLeft className="h-4 w-4" />Dashboard</Link>
-      <h1 className="text-3xl font-bold">Import your listings</h1>
+      <h1 className="text-3xl font-bold">Add your listings</h1>
       <p className="mb-6 mt-1 text-muted-foreground">
-        Connect once and we copy photos, descriptions, location and prices. Imported listings arrive as drafts: check the monthly price, then publish. Content stays in sync automatically.
+        Pick whatever matches how you work today. Everything arrives as a draft, so you can check the price before you publish.
       </p>
-      {isDemo && <p className="mb-6 rounded-md border border-primary/30 bg-primary/10 p-3 text-sm text-primary">Demo mode: any credentials work and sample listings are returned.</p>}
+      {isDemo && <p className="mb-6 rounded-md bg-secondary p-3 text-sm text-muted-foreground">Demo mode: any credentials work and sample listings are returned.</p>}
+      <nav className="mb-6 flex flex-wrap gap-2 text-sm">
+        {[["#quick", "Airbnb / Booking.com link"], ["#software", "Guesty, Resales Online, Inmobalia"], ["#csv", "Spreadsheet (CSV)"], ["#invite", "Invite a manager"]].map(([h, l]) => (
+          <a key={h} href={h} onClick={(e) => { e.preventDefault(); document.querySelector(h)?.scrollIntoView({ behavior: "smooth" }); }} className="rounded-full border px-3 py-1.5 hover:bg-accent">{l}</a>
+        ))}
+      </nav>
       <div className="space-y-6">
+        <div id="quick" className="scroll-mt-24"><QuickAdd orgId={orgId} /></div>
+        <h2 id="software" className="scroll-mt-24 pt-2 text-xl font-semibold">Connect your software</h2>
         {PROVIDERS.map((d) => <ProviderCard key={d.id} def={d} orgId={orgId} integration={integrations.find((i) => i.provider === d.id)} />)}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2"><CardTitle>No PMS? Airbnb, Booking.com, VRBO</CardTitle><Badge variant="muted">iCal</Badge></div>
-            <CardDescription>Add the property by hand, then paste the calendar export link from Airbnb or Booking.com. Availability syncs every 15 minutes.</CardDescription>
-          </CardHeader>
-          <CardContent><Link to="/dashboard/listings/new"><Button variant="outline"><Link2 />Add property with iCal</Button></Link></CardContent>
-        </Card>
+        <div id="csv" className="scroll-mt-24"><CsvImport orgId={orgId} /></div>
+        <div id="invite" className="scroll-mt-24"><InviteManager /></div>
+        <p className="text-sm text-muted-foreground">Prefer to type it in? <Link to="/dashboard/listings/new" className="font-medium underline">Add a property by hand</Link>.</p>
         <p className="text-xs text-muted-foreground">Using Hostaway, Smoobu, Lodgify or another CRM? Tell us. New connectors use the same import format.</p>
       </div>
     </div>

@@ -46,7 +46,7 @@ export default function PropertyPage() {
         <div className="text-right">
           <div className="text-2xl font-bold">{formatPrice(effectivePrice(p))}</div>
           <div className="text-sm text-muted-foreground">{p.utilities_included ? "Utilities included" : "Utilities extra"} · no platform fee</div>
-          {p.listed_on?.length ? <div className="text-xs text-muted-foreground">Also advertised on {p.listed_on.map((c) => CHANNEL_LABEL[c]).join(", ")}</div> : null}
+          {p.listed_on?.length ? <div className="text-xs text-muted-foreground">Also advertised on {p.listed_on.map((c, i) => <span key={c}>{i > 0 && ", "}{p.channel_links?.[c] && profile ? <a className="underline" href={p.channel_links[c]} target="_blank" rel="noreferrer">{CHANNEL_LABEL[c]}</a> : CHANNEL_LABEL[c]}</span>)}</div> : null}
         </div>
       </div>
 

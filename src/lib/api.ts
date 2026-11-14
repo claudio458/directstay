@@ -19,6 +19,8 @@ export interface SignUpInput {
   city: string;
   country: string;
   phone?: string;
+  /** Organization id from an invite link. */
+  referred_by?: string | null;
 }
 
 export interface DataApi {
@@ -149,7 +151,7 @@ const demoApi: DataApi = {
   async signUp(i) {
     const db = load();
     if (db.profiles.some((x) => x.email.toLowerCase() === i.email.toLowerCase())) throw new Error("An account with this email already exists");
-    const org: Organization = { id: "o-" + uid(), name: i.org_name || i.full_name, type: i.org_type, city: i.city, country: i.country, verified: false, email: i.email, phone: i.phone };
+    const org: Organization = { id: "o-" + uid(), name: i.org_name || i.full_name, type: i.org_type, city: i.city, country: i.country, verified: false, email: i.email, phone: i.phone, referred_by: i.referred_by ?? null };
     const prof = { id: "u-" + uid(), email: i.email, password: i.password, full_name: i.full_name, role: i.role, organization_id: org.id };
     db.organizations.push(org); db.profiles.push(prof); db.session = prof.id; save(db);
     return strip(prof);

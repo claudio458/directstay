@@ -11,6 +11,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { api, resetDemo } from "@/lib/api";
 import { describeWindow, nextAvailable } from "@/lib/availability";
 import { isDemo } from "@/lib/supabase";
+import { InviteManager } from "./ImportExtras";
 import type { InquiryStatus, PropertyWithMeta } from "@/lib/types";
 import { cn, effectivePrice, formatPrice } from "@/lib/utils";
 
@@ -63,7 +64,7 @@ export default function Dashboard() {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => syncAll.mutate()} disabled={syncAll.isPending}><CalendarClock />{syncAll.isPending ? "Syncing…" : "Sync calendars"}</Button>
-          <Link to="/dashboard/import"><Button variant="outline"><Download />Import from PMS / MLS</Button></Link>
+          <Link to="/dashboard/import"><Button variant="outline"><Download />Add listings</Button></Link>
           <Link to="/dashboard/listings/new"><Button><Plus />Add property</Button></Link>
         </div>
       </div>
@@ -155,6 +156,8 @@ export default function Dashboard() {
           ))}
         </div>
       )}
+
+      {tab === "listings" && <div className="mt-8"><InviteManager /></div>}
 
       {isDemo && (
         <div className="mt-12 text-center">
