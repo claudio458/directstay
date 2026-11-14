@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes, useLocation } from "react-router-dom";
 import { Toaster } from "sonner";
 import { useEffect } from "react";
 import Layout from "@/components/Layout";
@@ -16,6 +16,9 @@ import Dashboard from "@/pages/dashboard/Dashboard";
 import ListingEditor from "@/pages/dashboard/ListingEditor";
 import ImportListings from "@/pages/dashboard/ImportListings";
 
+// Static previews without SPA rewrites build with VITE_HASH_ROUTER=1 (npm run build:preview).
+const Router = import.meta.env.VITE_HASH_ROUTER ? HashRouter : BrowserRouter;
+
 const qc = new QueryClient({ defaultOptions: { queries: { staleTime: 30_000, refetchOnWindowFocus: false } } });
 
 function ScrollTop() {
@@ -28,7 +31,7 @@ export default function App() {
   return (
     <QueryClientProvider client={qc}>
       <AuthProvider>
-        <BrowserRouter>
+        <Router>
           <ScrollTop />
           <Routes>
             <Route element={<Layout />}>
@@ -50,7 +53,7 @@ export default function App() {
               <Route path="*" element={<NotFound />} />
             </Route>
           </Routes>
-        </BrowserRouter>
+        </Router>
         <Toaster theme="dark" position="top-center" richColors />
       </AuthProvider>
     </QueryClientProvider>
