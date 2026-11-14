@@ -10,6 +10,7 @@ export type ListingSource = "manual" | "guesty" | "resales" | "inmobalia";
 export type IntegrationProvider = "guesty" | "resales" | "inmobalia";
 /** own = the owner's monthly price; pms = derived from the PMS nightly rate. */
 export type PriceMode = "own" | "pms";
+export type Channel = "airbnb" | "booking" | "vrbo";
 export type SyncStatus = "ok" | "error" | "pending" | "never";
 export type InquiryStatus = "new" | "replied" | "closed";
 
@@ -84,6 +85,8 @@ export interface Property {
   /** Approximate location (mirrored from PMS/MLS or set by owner). */
   lat?: number | null;
   lng?: number | null;
+  /** Channels this home is also advertised on (shown as "Also on Airbnb"). */
+  listed_on?: Channel[];
   /** Content source. Imported listings keep title/description/photos/location in sync while mirror_content is true. */
   listing_source: ListingSource;
   external_id?: string | null;
@@ -125,6 +128,8 @@ export interface SearchFilters {
   moveIn?: string; // YYYY-MM-DD
   months?: number;
   guests?: number;
+  bedrooms?: number; // minimum
+  sort?: "soonest" | "price_asc" | "price_desc";
   maxPrice?: number;
   type?: PropertyType | "";
   q?: string;

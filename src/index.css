@@ -4,28 +4,40 @@
 
 @layer base {
   :root {
-    /* DirectStay palette: deep navy + warm gold (taken from the live site) */
-    --background: 215 69% 10%;
-    --foreground: 214 50% 94%;
-    --card: 215 62% 14%;
-    --card-foreground: 214 50% 94%;
-    --primary: 40 77% 54%;
-    --primary-foreground: 215 69% 10%;
-    --secondary: 215 55% 18%;
-    --secondary-foreground: 214 50% 94%;
-    --muted: 215 50% 17%;
-    --muted-foreground: 214 20% 68%;
-    --accent: 215 50% 22%;
-    --accent-foreground: 214 50% 94%;
-    --destructive: 0 72% 55%;
+    /* DirectStay palette: clean white, deep navy, warm gold accent */
+    --background: 0 0% 100%;
+    --foreground: 215 60% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 215 60% 14%;
+    --primary: 215 69% 16%;
+    --primary-foreground: 0 0% 100%;
+    --gold: 40 77% 54%;
+    --gold-foreground: 215 69% 12%;
+    --secondary: 214 32% 95%;
+    --secondary-foreground: 215 60% 14%;
+    --muted: 214 32% 96%;
+    --muted-foreground: 215 16% 40%;
+    --accent: 214 32% 92%;
+    --accent-foreground: 215 60% 14%;
+    --destructive: 0 72% 48%;
     --destructive-foreground: 0 0% 100%;
-    --success: 152 60% 45%;
-    --border: 215 40% 22%;
-    --input: 215 40% 24%;
-    --ring: 40 77% 54%;
+    --success: 152 62% 30%;
+    --border: 214 25% 88%;
+    --input: 214 25% 84%;
+    --ring: 215 69% 30%;
     --radius: 0.75rem;
   }
   * { @apply border-border; }
   body { @apply bg-background text-foreground font-sans antialiased; }
   h1, h2, h3 { @apply tracking-tight; }
 }
+
+/* Map price pins */
+.price-pin {
+  @apply whitespace-nowrap rounded-full border border-border bg-white px-2.5 py-1 text-xs font-bold text-foreground shadow-md transition;
+  transform: translate(-50%, -50%);
+  width: max-content;
+}
+.price-pin.active, .price-pin:hover { @apply border-primary bg-primary text-white; z-index: 1000; }
+.leaflet-container { font-family: inherit; background: hsl(var(--muted)); }
+.leaflet-div-icon { background: none; border: none; }

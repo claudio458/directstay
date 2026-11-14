@@ -1,6 +1,6 @@
 
 import * as seed from "@/data/seed";
-import { isAvailable } from "./availability";
+import { isAvailable, nextAvailable } from "./availability";
 import { parseICal } from "./ical";
 import { matchRegion, remoteToProperty } from "./importMapping";
 import { supabase } from "./supabase";
@@ -64,6 +64,7 @@ function applyFilters(list: PropertyWithMeta[], f: SearchFilters, viewer: Profil
     if (p.visibility === "network" && !viewer) return false;
     if (f.region && p.region?.slug !== f.region) return false;
     if (f.guests && p.max_guests < f.guests) return false;
+    if (f.bedrooms && p.bedrooms < f.bedrooms) return false;
     const price = effectivePrice(p);
     if (f.maxPrice && price && price > f.maxPrice) return false;
     if (f.type && p.type !== f.type) return false;
@@ -74,13 +75,20 @@ function applyFilters(list: PropertyWithMeta[], f: SearchFilters, viewer: Profil
     }
     if (f.moveIn && !isAvailable(p.blocks, f.moveIn, f.months ?? p.min_months)) return false;
     return true;
+  }).sort((a, b) => {
+    if (f.sort === "price_asc" || f.sort === "price_desc") {
+      const [x, y] = [effectivePrice(a) ?? Infinity, effectivePrice(b) ?? Infinity];
+      return f.sort === "price_asc" ? x - y : (y === Infinity ? -1 : y) - (x === Infinity ? -1 : x);
+    }
+    const s = (p: PropertyWithMeta) => nextAvailable(p.blocks, p.min_months)?.start ?? "9999";
+    return s(a).localeCompare(s(b));
   });
 }
 
 /* ------------------------------------------------------------------ */
 /* Demo implementation: everything lives in localStorage */
 
-const KEY = "directstay-demo-v3";
+const KEY = "directstay-demo-v4";
 interface DemoDb {
   regions: Region[]; organizations: Organization[]; properties: Property[]; blocks: AvailabilityBlock[]; inquiries: Inquiry[];
   profiles: (Profile & { password: string })[]; session: string | null;

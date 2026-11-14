@@ -3,6 +3,8 @@
 Free, commission-free exchange for **mid-term and winter rentals on the Costa del Sol**.
 Agencies and private owners list furnished properties once, availability stays in sync with their PMS or Airbnb / Booking.com calendars, and other members search what is really free and contact the listing agency directly.
 
+**Positioning:** B2B for property managers and agents. Members share the homes they already advertise on Airbnb / Booking.com; an agent's client books direct with the manager, pays **no platform fee**, and the agent earns the **commission** the manager set on the listing (`agent_commission_pct`). Search UX is map + list with price pins and filters (bedrooms, price, type, dates), in our own navy/gold branding.
+
 Phase 1 scope (from the product owner):
 
 - Costa del Sol only (8 areas, Málaga → Sotogrande). The `regions` table has a `country` column, so other regions can be added later without schema changes.
@@ -35,7 +37,7 @@ Demo login: `demo@directstay.app` / `demo1234` (pre-filled on the sign-in page).
 
 ## Supabase setup (go live)
 
-1. **Schema**: run `supabase/migrations/0001_init.sql`, then `0003_imports_and_pricing.sql`.
+1. **Schema**: run `supabase/migrations/0001_init.sql`, then `0003_imports_and_pricing.sql` and `0005_listed_on.sql`.
 2. **Demo data (optional)**: `supabase/seed.sql` (regenerate with `node scripts/make-seed-sql.mjs`).
 3. **Edge functions**:
    ```bash
@@ -53,6 +55,8 @@ Demo login: `demo@directstay.app` / `demo1234` (pre-filled on the sign-in page).
 |---|---|
 | Pages and routes | `src/App.tsx`, `src/pages/*` |
 | Data access (demo + Supabase, one interface) | `src/lib/api.ts` |
+| Map + list search (Leaflet, OpenStreetMap/CARTO tiles, no API key) | `src/pages/Search.tsx`, `src/components/MapView.tsx` |
+| Booking request box with fee/commission breakdown | `src/components/InquiryForm.tsx` |
 | Availability maths (free windows, "available for X months from date") | `src/lib/availability.ts` |
 | iCal parser | `src/lib/ical.ts` and `supabase/functions/sync-calendars` |
 | PMS/MLS → listing mapping rules | `src/lib/importMapping.ts` and `supabase/functions/pms-import` (keep both in sync) |
@@ -83,5 +87,6 @@ Demo login: `demo@directstay.app` / `demo1234` (pre-filled on the sign-in page).
 - **Admin**: verify agencies (`organizations.verified`), moderate listings.
 - **Translations**: UI is English; add `es` and `de` (i18next) since the original site was German.
 - **More PMS**: Hostaway, Smoobu, Lodgify adapters (same `(integration) => RemoteListing[]` signature).
-- **Map search** on the search page (lat/lng already stored).
+- **Bookings**: a booking request is an inquiry today. Next: accept/decline, contract, and commission tracking per booking (nothing is paid through the platform).
+- **Search as the map moves** (bounds filter) and saved searches for agents.
 - Images in the demo come from Unsplash; real listings use Supabase Storage (`property-photos` bucket) or the PMS photo URLs.

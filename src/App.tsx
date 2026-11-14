@@ -54,7 +54,7 @@ export default function App() {
             </Route>
           </Routes>
         </Router>
-        <Toaster theme="dark" position="top-center" richColors />
+        <Toaster theme="light" position="top-center" richColors />
       </AuthProvider>
     </QueryClientProvider>
   );

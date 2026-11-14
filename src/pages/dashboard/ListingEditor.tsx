@@ -13,7 +13,7 @@ import { Input, Label, Select, Textarea } from "@/components/ui/input";
 import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/lib/api";
 import type { CalendarSourceType, PmsProvider, Property, PropertyType } from "@/lib/types";
-import { cn, formatPrice } from "@/lib/utils";
+import { CHANNEL_LABEL, cn, formatPrice } from "@/lib/utils";
 import { SOURCE_LABEL } from "./Dashboard";
 import { LocationMap } from "@/components/LocationMap";
 
@@ -141,7 +141,7 @@ export default function ListingEditor() {
               {(p.price_mode ?? "own") === "own" && <div className="space-y-1"><Label>Monthly rent (€)</Label><Input type="number" min={0} value={p.monthly_price ?? ""} onChange={num("monthly_price")} /></div>}
               <div className="space-y-1"><Label>Min. months</Label><Input type="number" min={1} max={12} required value={p.min_months ?? 1} onChange={num("min_months")} /></div>
               <div className="space-y-1"><Label>Max. months</Label><Input type="number" min={1} max={24} required value={p.max_months ?? 12} onChange={num("max_months")} /></div>
-              <div className="space-y-1"><Label>Agent split (% of rent)</Label><Input type="number" min={0} max={50} placeholder="e.g. 10" value={p.agent_commission_pct ?? ""} onChange={num("agent_commission_pct")} /></div>
+              <div className="space-y-1"><Label>Agent commission (% of rent)</Label><Input type="number" min={0} max={50} placeholder="e.g. 10" value={p.agent_commission_pct ?? ""} onChange={num("agent_commission_pct")} /></div>
               <label className="flex items-center gap-2 pt-6 text-sm sm:col-span-2">
                 <input type="checkbox" checked={p.utilities_included ?? true} onChange={(e) => set("utilities_included", e.target.checked)} /> Utilities included in rent
               </label>
@@ -219,6 +219,21 @@ export default function ListingEditor() {
                   <div className="font-semibold">{t}</div><div className="text-sm text-muted-foreground">{d}</div>
                 </button>
               ))}
+            </div>
+            <div>
+              <div className="mb-2 text-sm font-medium">Also advertised on</div>
+              <div className="flex flex-wrap gap-2">
+                {(["airbnb", "booking", "vrbo"] as const).map((c) => {
+                  const on = p.listed_on?.includes(c);
+                  return (
+                    <button type="button" key={c} onClick={() => set("listed_on", on ? p.listed_on!.filter((x) => x !== c) : [...(p.listed_on ?? []), c])}
+                      className={cn("rounded-full border px-3 py-1.5 text-sm", on ? "border-primary bg-primary/10 font-medium" : "text-muted-foreground")}>
+                      {CHANNEL_LABEL[c]}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-1 text-xs text-muted-foreground">Agents see that this is the same home their client found on the platform, bookable here without the fee.</p>
             </div>
             <ul className="space-y-1 text-sm">
               {[

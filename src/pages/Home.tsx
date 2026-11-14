@@ -22,15 +22,15 @@ export default function Home() {
       {/* Hero */}
       <section className="relative overflow-hidden">
         <Photo src={HERO} alt="" className="absolute inset-0 h-full w-full" />
-        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/80 to-background/20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/90 to-background/10" />
         <div className="container relative py-20 md:py-32">
           <div className="max-w-2xl space-y-5">
-            <span className="inline-block rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-              Free in phase 1 · 0% commission · Live calendars
+            <span className="inline-block rounded-full bg-gold/25 px-3 py-1 text-xs font-semibold text-gold-foreground">
+              For property managers & agents · €0 platform fee
             </span>
-            <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">Mid-term & winter rentals on the Costa del Sol, shared directly between agents.</h1>
-            <p className="text-lg text-muted-foreground">
-              Agencies and owners import their listings from Guesty, Resales Online or Inmobalia, or link Airbnb and Booking.com calendars. Every member sees what is really free. No platform fees.
+            <h1 className="text-4xl font-extrabold leading-tight md:text-6xl">Book the homes you see on Airbnb and Booking.com. Direct, with no fee.</h1>
+            <p className="text-lg text-foreground/80">
+              The B2B exchange for property managers on the Costa del Sol. Members share the homes they advertise on the big platforms, with live calendars. Your client books direct with the manager, pays no platform fee, and you earn the agent commission.
             </p>
           </div>
           <SearchBar className="mt-10 max-w-5xl" />
@@ -40,9 +40,9 @@ export default function Home() {
       {/* Stats */}
       <section className="container -mt-2 grid gap-4 py-10 sm:grid-cols-3">
         {[
-          { icon: CalendarClock, t: `${synced} of ${props.length} listings`, s: "synced from iCal or PMS" },
-          { icon: Building2, t: `${orgs.length} agencies & owners`, s: "in the exchange network" },
-          { icon: Percent, t: "Free in phase 1", s: "no fees, no booking commission" },
+          { icon: CalendarClock, t: `${props.length} homes with live calendar`, s: `${synced} synced from PMS, Airbnb or Booking.com` },
+          { icon: Building2, t: `${orgs.length} property managers & owners`, s: "sharing their stock with agents" },
+          { icon: Percent, t: "€0 platform fee", s: "agents earn commission from the manager instead" },
         ].map(({ icon: I, t, s }) => (
           <div key={t} className="flex items-center gap-4 rounded-lg border bg-card p-5">
             <span className="flex h-11 w-11 items-center justify-center rounded-full bg-primary/15 text-primary"><I className="h-5 w-5" /></span>
@@ -61,11 +61,10 @@ export default function Home() {
           {regions.slice(0, 8).map((r) => (
             <Link key={r.id} to={`/area/${r.slug}`} className="group relative aspect-[4/5] overflow-hidden rounded-lg">
               <Photo src={r.image} alt={r.name} className="absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/30 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
               <div className="absolute bottom-0 p-5">
-                <div className="text-xs text-muted-foreground">{r.country}</div>
-                <div className="text-xl font-bold">{r.name}</div>
-                <div className="text-sm text-primary">{props.filter((p) => p.region_id === r.id).length} properties</div>
+                <div className="text-xl font-bold text-white">{r.name}</div>
+                <div className="text-sm font-medium text-white/90">{props.filter((p) => p.region_id === r.id).length} homes</div>
               </div>
             </Link>
           ))}
@@ -82,16 +81,16 @@ export default function Home() {
       </section>
 
       {/* How it works */}
-      <section className="border-y bg-card/40 py-16">
+      <section className="border-y bg-secondary/50 py-16">
         <div className="container">
-          <h2 className="mb-2 text-center text-2xl font-bold md:text-3xl">How the exchange works</h2>
-          <p className="mx-auto mb-10 max-w-2xl text-center text-muted-foreground">Built for agents who source furnished stays for their clients, and for owners who want qualified tenants without platform fees.</p>
+          <h2 className="mb-2 text-center text-2xl font-bold md:text-3xl">How it works for agents and managers</h2>
+          <p className="mx-auto mb-10 max-w-2xl text-center text-muted-foreground">Guests pay 10 to 20% in fees on the big platforms. Here the booking goes direct, and that margin stays between the manager and the agent who brought the client.</p>
           <div className="grid gap-6 md:grid-cols-4">
             {[
-              { i: Upload, t: "1. Import or upload", s: "Pull photos, description, location and prices from Guesty, Resales Online or Inmobalia, or add a property by hand." },
-              { i: RefreshCw, t: "2. Sync calendar", s: "Calendars sync from your PMS, or from the Airbnb / Booking.com iCal link if you have no PMS. Every 15 minutes." },
-              { i: Search, t: "3. Search", s: "Members filter by region, move-in month, length of stay and guests. Only truly free properties show up." },
-              { i: Handshake, t: "4. Connect", s: "Send an inquiry for your client. Agencies agree the commission split directly. The platform takes 0%." },
+              { i: Upload, t: "1. Managers share stock", s: "Import the homes you already run on Airbnb and Booking.com from Guesty, Resales Online or Inmobalia, or add them by hand." },
+              { i: RefreshCw, t: "2. Calendars stay live", s: "Calendars sync from your PMS, or from the Airbnb / Booking.com iCal link if you have no PMS. Every 15 minutes." },
+              { i: Search, t: "3. Agents search the map", s: "Filter by area, dates, bedrooms and price. Only homes that are really free show up, with the commission you earn." },
+              { i: Handshake, t: "4. Book direct", s: "Send a booking request for your client. The manager confirms and contracts direct. No platform fee, commission paid to you." },
             ].map(({ i: I, t, s }) => (
               <div key={t} className="rounded-lg border bg-card p-6">
                 <I className="mb-4 h-6 w-6 text-primary" />
@@ -105,14 +104,14 @@ export default function Home() {
 
       {/* CTA */}
       <section className="container py-16">
-        <div className="grid gap-6 rounded-xl border bg-gradient-to-br from-primary/15 to-transparent p-8 md:grid-cols-2 md:p-12">
+        <div className="grid gap-6 rounded-2xl bg-primary p-8 text-primary-foreground md:grid-cols-2 md:p-12 [&_p]:text-primary-foreground/75">
           <div>
-            <h2 className="text-2xl font-bold md:text-3xl">Have properties that sit empty between seasons?</h2>
-            <p className="mt-2 text-muted-foreground">List them once, keep your own booking channels, and let partner agencies fill the gaps with mid-term tenants.</p>
+            <h2 className="text-2xl font-bold md:text-3xl">Managing homes on Airbnb or Booking.com?</h2>
+            <p className="mt-2 text-muted-foreground">Share them here too. Keep your channels, set the commission you pay, and let other agents fill your calendar with direct bookings.</p>
           </div>
           <div className="flex flex-wrap items-center gap-3 md:justify-end">
-            <Link to="/auth?mode=signup"><Button size="lg">Join as agency</Button></Link>
-            <Link to="/list-your-property"><Button size="lg" variant="outline">I'm a private owner</Button></Link>
+            <Link to="/auth?mode=signup"><Button size="lg" variant="gold">Join as property manager</Button></Link>
+            <Link to="/list-your-property"><Button size="lg" variant="outline" className="border-white/40 hover:bg-white/10">How it works</Button></Link>
           </div>
         </div>
       </section>

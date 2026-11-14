@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/lib/api";
 import { describeWindow, freeWindows } from "@/lib/availability";
-import { effectivePrice, formatPrice } from "@/lib/utils";
+import { CHANNEL_LABEL, effectivePrice, formatPrice } from "@/lib/utils";
 import { LocationMap } from "@/components/LocationMap";
 
 export default function PropertyPage() {
@@ -45,7 +45,8 @@ export default function PropertyPage() {
         </div>
         <div className="text-right">
           <div className="text-2xl font-bold">{formatPrice(effectivePrice(p))}</div>
-          <div className="text-sm text-muted-foreground">{p.utilities_included ? "Utilities included" : "Utilities extra"}</div>
+          <div className="text-sm text-muted-foreground">{p.utilities_included ? "Utilities included" : "Utilities extra"} · no platform fee</div>
+          {p.listed_on?.length ? <div className="text-xs text-muted-foreground">Also advertised on {p.listed_on.map((c) => CHANNEL_LABEL[c]).join(", ")}</div> : null}
         </div>
       </div>
 
@@ -107,7 +108,7 @@ export default function PropertyPage() {
 
         <aside className="space-y-6">
           <Card className="lg:sticky lg:top-24">
-            <CardHeader><CardTitle>Request this property</CardTitle></CardHeader>
+            <CardHeader><CardTitle>Request to book</CardTitle></CardHeader>
             <CardContent><InquiryForm p={p} /></CardContent>
           </Card>
           {org && (
@@ -119,7 +120,7 @@ export default function PropertyPage() {
               <CardContent className="space-y-2 text-sm">
                 <div className="text-muted-foreground">{org.city}, {org.country}</div>
                 {p.agent_commission_pct ? (
-                  <div className="flex items-center gap-2 text-primary"><Handshake className="h-4 w-4" />Shares {p.agent_commission_pct}% with the referring agency</div>
+                  <div className="flex items-center gap-2 font-medium"><Handshake className="h-4 w-4" />Pays {p.agent_commission_pct}% commission to the booking agent</div>
                 ) : null}
                 {profile ? (
                   <>

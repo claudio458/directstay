@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { api } from "@/lib/api";
 import { isAvailable, nextAvailable } from "@/lib/availability";
 import type { PropertyWithMeta } from "@/lib/types";
+import { commissionPerMonth, effectivePrice, eur } from "@/lib/utils";
 
 export function InquiryForm({ p }: { p: PropertyWithMeta }) {
   const { profile, organization } = useAuth();
@@ -23,6 +24,8 @@ export function InquiryForm({ p }: { p: PropertyWithMeta }) {
     message: "",
   });
   const [sent, setSent] = useState(false);
+  const price = effectivePrice(p);
+  const commission = commissionPerMonth(p);
   const [busy, setBusy] = useState(false);
   const ok = isAvailable(p.blocks, f.move_in, f.months);
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) =>
@@ -31,7 +34,7 @@ export function InquiryForm({ p }: { p: PropertyWithMeta }) {
   if (sent) {
     return (
       <div className="rounded-lg border border-success/40 bg-success/10 p-5 text-sm">
-        <div className="font-semibold text-success">Inquiry sent</div>
+        <div className="font-semibold text-success">Booking request sent</div>
         <p className="mt-1 text-muted-foreground">{p.organization?.name ?? "The owner"} will reply to {f.from_email} directly.</p>
       </div>
     );
@@ -46,7 +49,7 @@ export function InquiryForm({ p }: { p: PropertyWithMeta }) {
         try {
           await api.createInquiry({ ...f, property_id: p.id, from_organization_id: organization?.id ?? null });
           setSent(true);
-          toast.success("Inquiry sent");
+          toast.success("Booking request sent");
         } catch (err) {
           toast.error((err as Error).message);
         } finally { setBusy(false); }
@@ -72,10 +75,24 @@ export function InquiryForm({ p }: { p: PropertyWithMeta }) {
       )}
       <label className="flex items-center gap-2 text-sm">
         <input type="checkbox" checked={f.on_behalf_of_client} onChange={(e) => setF({ ...f, on_behalf_of_client: e.target.checked })} className="accent-[hsl(var(--primary))]" />
-        I'm an agent asking for a client
+        I'm an agent booking for a client
       </label>
       <div className="space-y-1"><Label>Message</Label><Textarea required placeholder="Who is the tenant, purpose of stay, any questions…" value={f.message} onChange={set("message")} /></div>
-      <Button type="submit" className="w-full" disabled={busy}><Send /> Send inquiry</Button>
+      {price ? (
+        <div className="space-y-1.5 rounded-lg bg-secondary/70 p-3 text-sm">
+          <div className="flex justify-between"><span>{eur(price)} × {f.months} month{f.months > 1 ? "s" : ""}</span><span>{eur(price * f.months)}</span></div>
+          <div className="flex justify-between"><span>Platform fee</span><span className="font-semibold text-success">€0</span></div>
+          <div className="flex justify-between border-t pt-1.5 font-semibold"><span>Client pays</span><span>{eur(price * f.months)}</span></div>
+          {commission && f.on_behalf_of_client ? (
+            <div className="flex justify-between rounded-md bg-gold/25 px-2 py-1.5 font-semibold text-gold-foreground">
+              <span>Your commission ({p.agent_commission_pct}%)</span><span>{eur(commission * f.months)}</span>
+            </div>
+          ) : null}
+          <p className="text-xs text-muted-foreground">{commission ? "Commission is paid by the property manager out of the rent, not by your client." : "Booked direct with the property manager."}</p>
+        </div>
+      ) : null}
+      <Button type="submit" variant="gold" size="lg" className="w-full" disabled={busy}><Send /> Request to book</Button>
+      <p className="text-center text-xs text-muted-foreground">No payment now. The manager confirms availability and contracts direct.</p>
       {profile && <p className="text-xs text-muted-foreground">Sent as {profile.full_name}{organization ? `, ${organization.name}` : ""}.</p>}
     </form>
   );

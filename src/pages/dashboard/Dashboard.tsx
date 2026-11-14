@@ -18,8 +18,8 @@ export const SOURCE_LABEL = { manual: "Manual", guesty: "Guesty", resales: "Resa
 
 const TABS = [
   { id: "listings", label: "My listings" },
-  { id: "inbox", label: "Inquiries received" },
-  { id: "sent", label: "Inquiries sent" },
+  { id: "inbox", label: "Booking requests received" },
+  { id: "sent", label: "Booking requests sent" },
 ] as const;
 
 function SyncBadge({ p }: { p: PropertyWithMeta }) {
@@ -72,7 +72,7 @@ export default function Dashboard() {
         {[
           { t: "Listings", v: listings.length },
           { t: "Published", v: listings.filter((l) => l.status === "published").length },
-          { t: "New inquiries", v: newCount },
+          { t: "New booking requests", v: newCount },
           { t: "Calendar errors", v: errors },
         ].map((s) => <Card key={s.t} className="p-5"><div className="text-sm text-muted-foreground">{s.t}</div><div className="text-2xl font-bold">{s.v}</div></Card>)}
       </div>
@@ -119,7 +119,7 @@ export default function Dashboard() {
 
       {tab === "inbox" && (
         <div className="space-y-3">
-          {inbox.length === 0 && <Card className="p-10 text-center text-muted-foreground"><Inbox className="mx-auto mb-2" />No inquiries yet.</Card>}
+          {inbox.length === 0 && <Card className="p-10 text-center text-muted-foreground"><Inbox className="mx-auto mb-2" />No booking requests yet.</Card>}
           {inbox.map((i) => (
             <Card key={i.id} className="p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
@@ -143,7 +143,7 @@ export default function Dashboard() {
 
       {tab === "sent" && (
         <div className="space-y-3">
-          {sent.length === 0 && <Card className="p-10 text-center text-muted-foreground"><Send className="mx-auto mb-2" />You haven't sent any inquiries. <Link to="/search" className="text-primary">Find a property</Link></Card>}
+          {sent.length === 0 && <Card className="p-10 text-center text-muted-foreground"><Send className="mx-auto mb-2" />You haven't sent any booking requests. <Link to="/search" className="text-primary">Find a property</Link></Card>}
           {sent.map((i) => (
             <Card key={i.id} className="flex items-center justify-between p-5">
               <div>

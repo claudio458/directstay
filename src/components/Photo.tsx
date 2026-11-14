@@ -7,7 +7,7 @@ export function Photo({ src, alt, className }: { src?: string; alt: string; clas
   const [failed, setFailed] = useState(false);
   if (!src || failed) {
     return (
-      <div className={cn("flex items-center justify-center bg-gradient-to-br from-secondary to-accent text-muted-foreground", className)}>
+      <div className={cn("flex items-center justify-center bg-gradient-to-br from-slate-300 to-slate-400 text-white", className)}>
         <Home className="h-8 w-8 opacity-50" />
       </div>
     );

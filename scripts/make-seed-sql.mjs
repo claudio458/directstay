@@ -19,7 +19,7 @@ sql += ins("properties", s.properties.map(({ calendar: c, created_at, ...p }) =>
   size_m2: p.size_m2 ?? null, bedrooms: p.bedrooms, bathrooms: p.bathrooms, max_guests: p.max_guests, min_months: p.min_months, max_months: p.max_months,
   monthly_price: p.monthly_price ?? null, utilities_included: p.utilities_included, agent_commission_pct: p.agent_commission_pct ?? null,
   description: p.description, amenities: p.amenities, photos: p.photos, visibility: p.visibility, status: p.status,
-  lat: p.lat ?? null, lng: p.lng ?? null, listing_source: p.listing_source, external_id: p.external_id ?? null, mirror_content: p.mirror_content, price_mode: p.price_mode, source_nightly_rate: p.source_nightly_rate ?? null, source_monthly_rate: p.source_monthly_rate ?? null,
+  listed_on: p.listed_on ?? [], lat: p.lat ?? null, lng: p.lng ?? null, listing_source: p.listing_source, external_id: p.external_id ?? null, mirror_content: p.mirror_content, price_mode: p.price_mode, source_nightly_rate: p.source_nightly_rate ?? null, source_monthly_rate: p.source_monthly_rate ?? null,
   calendar_type: c.type, ical_url: c.ical_url ?? null, pms_provider: c.pms_provider ?? null, pms_listing_id: c.pms_listing_id ?? null, sync_status: c.sync_status,
 })));
 sql += ins("availability_blocks", s.blocks.map((b) => ({ property_id: b.property_id, start_date: b.start_date, end_date: b.end_date, source: b.source, summary: b.summary ?? null })));

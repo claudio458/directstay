@@ -64,7 +64,7 @@ export function SearchBar({ initial = {}, className }: { initial?: SearchFilters
           {Array.from({ length: 10 }, (_, i) => i + 1).map((g) => <option key={g} value={g}>{g} guest{g > 1 ? "s" : ""}</option>)}
         </select>
       </Field>
-      <div className="p-2"><Button type="submit" size="lg" className="w-full md:w-auto"><Search /> Search</Button></div>
+      <div className="p-2"><Button type="submit" size="lg" variant="gold" className="w-full md:w-auto"><Search /> Search</Button></div>
     </form>
   );
 }

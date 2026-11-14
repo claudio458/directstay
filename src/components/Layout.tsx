@@ -10,13 +10,13 @@ const nav = [
   { to: "/search", label: "Search" },
   { to: "/areas", label: "Areas" },
   { to: "/network", label: "Agent network" },
-  { to: "/list-your-property", label: "List a property" },
+  { to: "/list-your-property", label: "For property managers" },
 ];
 
 export function Logo() {
   return (
     <Link to="/" className="flex items-center gap-2 font-bold text-lg">
-      <span className="flex h-8 w-8 items-center justify-center rounded-md bg-primary text-primary-foreground"><Home className="h-4 w-4" /></span>
+      <span className="flex h-8 w-8 items-center justify-center rounded-md bg-gold text-gold-foreground"><Home className="h-4 w-4" /></span>
       DirectStay
     </Link>
   );
@@ -28,7 +28,7 @@ export default function Layout() {
   return (
     <div className="flex min-h-screen flex-col">
       {isDemo && (
-        <div className="bg-primary/15 px-4 py-1.5 text-center text-xs text-primary">
+        <div className="bg-secondary px-4 py-1.5 text-center text-xs text-muted-foreground">
           Demo mode: sample data stored in your browser. Connect Supabase to go live (see README).
         </div>
       )}
@@ -51,7 +51,7 @@ export default function Layout() {
             ) : (
               <>
                 <Link to="/auth"><Button variant="ghost" size="sm">Sign in</Button></Link>
-                <Link to="/auth?mode=signup"><Button size="sm">Join free</Button></Link>
+                <Link to="/auth?mode=signup"><Button size="sm" variant="gold">Join free</Button></Link>
               </>
             )}
           </div>
@@ -78,7 +78,7 @@ export default function Layout() {
         <div className="container grid gap-8 md:grid-cols-4">
           <div className="md:col-span-2 space-y-3">
             <Logo />
-            <p className="max-w-sm">The free exchange for mid-term and winter rentals on the Costa del Sol. Agents and owners share live availability and work together directly.</p>
+            <p className="max-w-sm">The B2B exchange for property managers on the Costa del Sol. The homes you know from Airbnb and Booking.com, bookable direct: no platform fee, agents earn commission.</p>
           </div>
           <div className="flex flex-col gap-2">
             <span className="font-semibold text-foreground">Platform</span>
